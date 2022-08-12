@@ -11,8 +11,12 @@ const database = getDatabase(firebase);
 const dbRef = ref(database);
 
 // Helper Function 
-const objectToArray = function (obj) {
+const objectToArray = function(obj) {
     return JSON.parse(JSON.stringify(Object.entries(obj)))
+}
+
+const copyArrayObject = function (arr) {
+    return JSON.parse(JSON.stringify(arr));
 }
 
 function App() {
@@ -23,7 +27,7 @@ function App() {
     const [listsArray, setListsArray] = useState([]);
 
     const [listItems, setListItems] = useState([]);
-    const sortSetListItems = function (listItems) {
+    const sortSetListItems = function(listItems) {
         const sortedListItems = objectToArray(listItems).sort((a, b) => {
             return (a[1].index < b[1].index ? -1 : 1)
         })
@@ -34,29 +38,28 @@ function App() {
     // CREATING NEW LISTS ---------------------------------
     // Controlled input for list user ✅
     const [user, setUser] = useState(`Anonymous`)
-    const handleUserChange = (e) => {
+    const handleUserChange = function(e) {
         setUser(e.target.value);
     }
 
     // Controlled input for list title ✅
     const [titleInput, setTitleInput] = useState(`Anonymous's List`)
-    const handleTitleChange = (e) => {
+    const handleTitleChange = function(e) {
         setTitleInput(e.target.value);
     }
 
     // CREATING LIST ITEMS --------------------------------
     // Controlled input for list item text ✅
     const [listItemTextInput, setListItemTextInput] = useState('');
-    const handleListItemTextChange = (e) => {
+    const handleListItemTextChange = function(e) {
         setListItemTextInput(e.target.value);
     }
 
 
     // HANDLERS -----------------------------------------------------------------------------------
     // LIST BUTTON HANDLERS -------------------------------
-    // Pushes a new list into Firebase with user, title, and time ✅
     // Display list item for the given key✅
-    const handleDisplayList = function (key) {
+    const handleDisplayList = function(key) {
 
         setListKey(key);
 
@@ -71,7 +74,8 @@ function App() {
         })
     }
 
-    const handleSubmitList = (e) => {
+    // Pushes a new list into Firebase with user, title, and time ✅
+    const handleSubmitList = function(e) {
         e.preventDefault();
 
         // Helper function to make 1-digit months and days two digits (e.g. January => 0 => 01)
@@ -110,50 +114,53 @@ function App() {
 
     // LIST ITEMS BUTTON HANDLERS -------------------------
     // Pushes list item into the active list ✅
-    const handleSubmitListItem = (e) => {
+    const handleSubmitListItem = function(e) {
         e.preventDefault();
 
         // Ensure there is a list key
         if (listKey && listItemTextInput) {
             const dbListItemsRef = ref(database, `/${listKey}/listItems`)
 
-            let itemIndex = 0;
-            get(dbListItemsRef).then((listItems) => {
-
-                // Increase the item index depending on how many items are present currently
-                if (listItems.val() !== null) {
-                    itemIndex = Object.keys(listItems.val()).length;
-                }
-
-                // Push the list item entry into firebase
-                const listItemKey = push(dbListItemsRef, {
-                    index: itemIndex,
-                    text: listItemTextInput
-                })['key']
-
-                // Update the listItems state
+            const itemIndex = listItems.length;
+            push(dbListItemsRef, {
+                index: itemIndex,
+                text: listItemTextInput
+            }).then(() => {
                 get(dbListItemsRef).then((listItemsUpdated) => {
                     const list = listItemsUpdated.val();
+                    // Update display state
                     sortSetListItems(list)
+                    setListItemTextInput('');
                 })
-
-                // Clear the text input
-                setListItemTextInput('');
-
             })
+
+
+
         }
 
     }
 
-    // Removes individual list items✅
-    const handleRemoveListItem = function (listKey, listItemKey) {
-        const dbListItemRef = ref(database, `/${listKey}/listItems/${listItemKey}`)
+    // Removes individual list items, and shifts indices accordingly ✅
+    const handleRemoveListItem = function(listKey, listItemKey) {
+        const dbListItemsRef = ref(database, `/${listKey}/listItems`)
 
-        // Update state and remove the entry from db
-        setListItems(listItems.filter((item) => {
+        // Filter out keyed item, and shift indices
+        const newListItemsArray = listItems.filter((item) => {
             return item[0] !== listItemKey;
-        }))
-        remove(dbListItemRef);
+        }).map((item, itemIndex) => {
+            item[1].index = itemIndex;
+            return item
+        });
+
+        // Create object with updated item indices for Firebase
+        const newListItemsObject = {};
+        newListItemsArray.forEach((item) => {
+            newListItemsObject[item[0]] = item[1];
+        })
+
+        // Update state and Firebase
+        setListItems(newListItemsArray);
+        set(dbListItemsRef, newListItemsObject)
     }
 
 
@@ -162,7 +169,6 @@ function App() {
 
         // Update state for displaying listsArray
         onValue(dbRef, (response) => {
-            console.log(listItems);
             if (response.exists()) {
                 setListsArray(objectToArray(response.val()))
             } else {
