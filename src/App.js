@@ -15,10 +15,6 @@ const objectToArray = function(obj) {
     return JSON.parse(JSON.stringify(Object.entries(obj)))
 }
 
-const copyArrayObject = function (arr) {
-    return JSON.parse(JSON.stringify(arr));
-}
-
 function App() {
 
     // STATES -------------------------------------------------------------------------------------
