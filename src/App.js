@@ -11,11 +11,11 @@ import DisplayLists from './DisplayLists'
 import DisplayCreateListItem from './DisplayCreateListItem';
 import DisplayListItems from './DisplayListItems';
 
-function App() {
+// Firebase variables
+const database = getDatabase(firebase);
+const dbRef = ref(database);
 
-  // Firebase variables
-  const database = getDatabase(firebase);
-  const dbRef = ref(database);
+function App() {
 
   // Root Firebase objects
   const [listsObject, setListsObject] = useState({});
