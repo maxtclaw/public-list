@@ -16,24 +16,28 @@ export default function DisplayCreateListItem({database, listsObject, listKey, s
 
         // If the given listKey exists in Firebase, then add the listItem, otherwise display error
         if (Object.keys(listsObject).length) {
-            const newListItemIndex = ('listItems' in listsObject[listKey]) ? Object.keys(listsObject[listKey]['listItems']).length : 0;
-
-            setListItemTextInput('');
-            push(dbListItemsRef, {
-                index: newListItemIndex,
-                text: listItemTextInput
-            })
+            if (listsObject[listKey]) {
+                const newListItemIndex = ('listItems' in listsObject[listKey]) ? Object.keys(listsObject[listKey]['listItems']).length : 0;
+    
+                setListItemTextInput('');
+                push(dbListItemsRef, {
+                    index: newListItemIndex,
+                    text: listItemTextInput
+                })
+            } else {
+                setListKey('');
+                alert('Error Submitting - This list either does not exist, or has been deleted.')
+            }
         } else {
             setListKey('');
-            alert('Error submitting - This list either does not exist, or has been deleted.')
+            alert('Error Submitting - This list either does not exist, or has been deleted.')
         }
-
     }
 
     return (
         <form onSubmit={handleSubmitListItem}>
-            <input type="text" name="listItem" id="listItem" value={listItemTextInput} onChange={handleListItemTextChange} placeholder='list item' required />
-            <button type="submit">Submit</button>
+            <input type="text" name="listItem" id="listItem" value={listItemTextInput} onChange={handleListItemTextChange} placeholder='e.g. Touching grass' required />
+            <button type="submit">Submit List Item</button>
         </form>
     )
 }

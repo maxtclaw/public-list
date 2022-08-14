@@ -1,40 +1,65 @@
 import { push } from 'firebase/database'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export default function DisplayCreateList({ dbRef, setListKey }) {
+export default function DisplayCreateList({ dbRef, userKey, setListKey }) {
     
     // Controlled input for list user ✅
-    const [userInput, setUserInput] = useState(`Anonymous`)
-    const handleUserChange = function (e) {
-        setUserInput(e.target.value);
+    const [authorInput, setAuthorInput] = useState('Anonymous User')
+    const handleAuthorChange = function (e) {
+        setAuthorInput(e.target.value);
     }
 
     // Controlled input for list title ✅
-    const [titleInput, setTitleInput] = useState(`Anonymous's List`)
+    const [titleInput, setTitleInput] = useState(`Anonymous User's List`)
     const handleTitleChange = function (e) {
         setTitleInput(e.target.value);
     }
-    
+
+    // Controlled input for list hidden ✅
+    const [hiddenInput, setHiddenInput] = useState(false);
+    const handleHiddenInput = function () {
+        setHiddenInput(!hiddenInput);
+    }
+
+    // Selects all text inside textbox ✅
+    const selectAllText = function (e) {
+        e.target.select()
+    }
+
+    // useEffect to reset hiddenInput if changing to Anonymous User ✅
+    useEffect(() => {
+        if (userKey === 'Anonymous User') {
+            setHiddenInput(false);
+        }
+
+        setAuthorInput(userKey)
+        setTitleInput(`${userKey}'s List`)
+
+    }, [userKey])
 
     // Create and push a new list to Firebase ✅
     const handleSubmitList = function (e) {
         e.preventDefault();
 
-        // Helper function to make 1-digit months and days two digits (e.g. January => 0 => 01)
+        // Helper functions appending leading zeros to two or three digits
         const twoDigits = (num) => { return (num < 10 ? '0' : '') + num };
+        const threeDigits = (num) => { return (num < 10 ? '00' : (num < 100 ? '0' : '')) + num };
 
+        // Store current local time as a string in YYYYMMDDhhmmsslll format
         const currentDate = new Date();
         const currentTime = currentDate.getFullYear().toString()
             + twoDigits(currentDate.getMonth() + 1)
             + twoDigits(currentDate.getDate())
-            + currentDate.getHours()
-            + currentDate.getMinutes()
-            + currentDate.getSeconds()
-            + currentDate.getMilliseconds();
+            + twoDigits(currentDate.getHours())
+            + twoDigits(currentDate.getMinutes())
+            + twoDigits(currentDate.getSeconds())
+            + threeDigits(currentDate.getMilliseconds());
 
         const firebaseObj = push(dbRef, {
-            user: userInput,
+            user: userKey,
+            author: authorInput,
             title: titleInput,
+            hidden: hiddenInput,
             time: currentTime,
             listItems: {}
         });
@@ -44,16 +69,29 @@ export default function DisplayCreateList({ dbRef, setListKey }) {
     }
 
 
-
     return (
         <form onSubmit={handleSubmitList}>
-            <label htmlFor="listTitle">List Title</label>
-            <input type="text" id="title" onChange={handleTitleChange} value={titleInput} required />
+            <div onClick={selectAllText}>
+                <label htmlFor="newTitle">List Title: </label>
+                <input type="text" id="newTitle" onChange={handleTitleChange} value={titleInput} placeholder='e.g. My Necessities' required />
+            </div>
 
-            <label htmlFor="user">List Author: </label>
-            <input type="text" id="user" onChange={handleUserChange} value={userInput} required />
+            <div onClick={selectAllText} >
+                <label htmlFor="newAuthor">List Author: </label>
+                <input type="text" id="newAuthor" onChange={handleAuthorChange} value={authorInput} placeholder='e.g. Needy Sapling' required />
+            </div>
+
+            {
+                // Allow hidden option if a user has been provided
+                userKey !== 'Anonymous User' ? <>
+                    <label htmlFor="newHidden">Make List Private</label>
+                    <input type="checkbox" id="newHidden" checked={hiddenInput} onChange={handleHiddenInput} />
+                </> : null
+
+            }
 
             <button type="submit">Make my list!</button>
+
         </form>
     );
 }

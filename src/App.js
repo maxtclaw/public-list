@@ -6,6 +6,7 @@ import { getDatabase, ref, onValue } from 'firebase/database';
 
 // Import React Methods and Components
 import { useState, useEffect } from 'react';
+import DisplayUserLogin from './DisplayUserLogin';
 import DisplayCreateList from './DisplayCreateList';
 import DisplayLists from './DisplayLists'
 import DisplayCreateListItem from './DisplayCreateListItem';
@@ -17,40 +18,48 @@ const dbRef = ref(database);
 
 function App() {
 
-  // Root Firebase objects
-  const [listsObject, setListsObject] = useState({});
+	// Root Firebase objects
+	const [listsObject, setListsObject] = useState({});
 
-  // Current working key
-  const [listKey, setListKey] = useState('')
+	// Current userKey and listKey
+	const [userKey, setUserKey] = useState('Anonymous User');
+	const [listKey, setListKey] = useState('');
 
-  // useEffect to keep root Firebase objects updated 
-  useEffect(() => {
-
-    onValue(dbRef, (response) => {
-      if (response.exists()) {
-        setListsObject(response.val());
-      } else {
-        setListsObject({});
-      }
-    })
-
-  }, [])
+	// useEffect to keep root Firebase objects updated ✅
+	useEffect(() => {
+		onValue(dbRef, (response) => {
+			if (response.exists()) {
+				setListsObject(response.val());
+			} else {
+				setListsObject({});
+			}
+		})
+	}, [])
 
 
-  return (
-    <div className="App">
+	return (
+		<div className="App">
 
-      <p>List key {listKey}</p>
+		<h1>Public List</h1>
+		<DisplayUserLogin userKey={userKey} setUserKey={setUserKey} />
 
-      <DisplayCreateList dbRef={dbRef} setListKey={setListKey} />
+		<DisplayCreateList dbRef={dbRef} userKey={userKey} setListKey={setListKey} />
 
-      <DisplayLists database={database} listsObject={listsObject} listKey={listKey} setListKey={setListKey} />
+		<DisplayLists database={database} listsObject={listsObject} userKey={userKey} listKey={listKey} setListKey={setListKey} />
 
-      <DisplayCreateListItem database={database} listsObject={listsObject} listKey={listKey} setListKey={setListKey} />
-
-      <DisplayListItems database={database} listsObject={listsObject} listKey={listKey} />
-    </div>
-  );
+		{
+			listKey ?
+			<>
+				{listsObject[listKey]['user'] === userKey ?
+				<DisplayCreateListItem database={database} listsObject={listsObject} listKey={listKey} setListKey={setListKey} />
+				: null}
+				<DisplayListItems database={database} listsObject={listsObject} userKey={userKey} listKey={listKey} setListKey={setListKey} />
+			</>
+			: null
+		}
+		
+		</div>
+	);
 }
 
 export default App;
