@@ -1,4 +1,3 @@
-import { ref, remove } from 'firebase/database';
 import { useEffect, useState } from 'react';
 import DisplayList from './DisplayList';
 
@@ -6,17 +5,6 @@ export default function DisplayLists({ database, listsObject, userKey, listKey, 
     
     // Convert listsObject to array for mapping
     const listsArray = Object.entries(listsObject);
-
-    // Handle deletion of lists ✅
-    const handleRemoveList = function (listKeyParam) {
-        const dbListRef = ref(database, `/${listKeyParam}`);
-        
-        // Clear listKey if deleting current list
-        if (listKey === listKeyParam) {
-            setListKey('');
-        }
-        remove(dbListRef);
-    }
 
     // Controlled input for selecting lists to display ✅
     // set to 'public' to view all public viewable lists, or 'user' for lists by userKey
@@ -107,8 +95,9 @@ export default function DisplayLists({ database, listsObject, userKey, listKey, 
                             if (listsDisplaySettingInput === 'public') {
                                 return (list[1].user === 'Anonymous User' || !list[1].hidden);
                             } else if (listsDisplaySettingInput === 'user') {
-                                console.log(list[1].user)
                                 return list[1].user === userKey;
+                            } else {
+                                return false;
                             }
                         }).map((list) => {
                             const listObjectKey = list[0];
