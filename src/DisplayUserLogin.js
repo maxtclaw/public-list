@@ -22,8 +22,8 @@ export default function DisplayUserLogin({ userKey, setUserKey }) {
         setIsEditingUser(false)
 
         // Remove focus after submitting
-        const userInputTextbox = document.getElementById('user');
-        userInputTextbox.blur();
+        const userInputTextboxElement = document.getElementById('user');
+        userInputTextboxElement.blur();
         
         // Update userKey if there is an input, otherwise, use the default 'Anonymous User'
         if (userInput) {
@@ -34,10 +34,10 @@ export default function DisplayUserLogin({ userKey, setUserKey }) {
         }
     }
 
-    // Automatic select on user input textbox when editing ✅
+    // Automatic highlight userInput textbox when editing ✅
     useEffect(() => {
-        const userInputTextbox = document.getElementById('user');
-        userInputTextbox.select();
+        const userInputTextboxElement = document.getElementById('user');
+        userInputTextboxElement.select();
     }, [isEditingUser])
 
     return (

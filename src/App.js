@@ -43,19 +43,19 @@ function App() {
 		<h1>Public List</h1>
 		<DisplayUserLogin userKey={userKey} setUserKey={setUserKey} />
 
+		{/* TODO: Fix bug where lists can be created while setting userKey */}
 		<DisplayCreateList dbRef={dbRef} userKey={userKey} setListKey={setListKey} />
 
 		<DisplayLists database={database} listsObject={listsObject} userKey={userKey} listKey={listKey} setListKey={setListKey} />
 
 		{
-			listKey ?
-			<>
+			// Display list items if there is a list is selected
+			listKey ? <>
 				{listsObject[listKey]['user'] === userKey ?
-				<DisplayCreateListItem database={database} listsObject={listsObject} listKey={listKey} setListKey={setListKey} />
-				: null}
+					<DisplayCreateListItem database={database} listsObject={listsObject} listKey={listKey} setListKey={setListKey} />
+					: null}
 				<DisplayListItems database={database} listsObject={listsObject} userKey={userKey} listKey={listKey} setListKey={setListKey} />
-			</>
-			: null
+			</> : null
 		}
 		
 		</div>

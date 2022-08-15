@@ -1,4 +1,5 @@
 import { ref, set, update } from "firebase/database";
+import { useEffect } from "react";
 import { useState } from "react"
 
 export default function DisplayListItems({ database, listsObject, userKey, listKey, setListKey }) {
@@ -108,11 +109,19 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
         adjustListItemIndex('remove', listItemKeyParam);
     }
 
-    // Editts list item at given listItemKey ✅
+    // Edits list item at given listItemKey ✅
     const handleSelectEditListItem = function (listItemKeyParam, listItemTextParam) {
         setEditListItemKey(listItemKeyParam);
         setEditListItemTextInput(listItemTextParam);
     }
+
+    // Automatically highlight listItem textbox when editing ✅
+    useEffect(() => {
+        const editListItemTextboxElement = document.getElementById(`editListItem`);
+        if (editListItemTextboxElement) {
+            editListItemTextboxElement.select()
+        }
+    }, [editListItemKey])
 
     // Handle submission of edited listItem ✅
     const handleSubmitEditListItem = function (e, listKeyParam, listItemKeyParam, editListItemTextParam) {
@@ -154,9 +163,9 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
                     return (a[1].index < b[1].index ? -1 : 1)
                 })
     
-                return (<ul>
+                return (<ol>
                     {
-                        listItems.map((item) => {
+                        listItems.map((item, itemIndex, itemArray) => {
                             
                             const itemKey = item[0];
                             const itemText = item[1].text;
@@ -166,22 +175,23 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
 
                                     {
                                         listsObject[listKey].user === userKey ?
-                                            (<>
+                                            (<div>
+                                                <button onClick={() => {handleShiftListItem('up', itemKey)}} disabled={itemIndex === 0}>Move Up</button>
+                                                <button onClick={() => {handleShiftListItem('down', itemKey)}} disabled={itemIndex === itemArray.length - 1}>Move Down</button>
+                                                <button onClick={() => { handleSelectEditListItem(itemKey, itemText) }}>Edit</button>
                                                 <button onClick={() => { handleRemoveListItem(itemKey) }}>Delete</button>
-                                                <button onClick={() => { handleSelectEditListItem(itemKey, itemText) }}>Edit this</button>
-                                                <button onClick={() => {handleShiftListItem('up', itemKey)}}>Move up</button>
-                                                <button onClick={() => {handleShiftListItem('down', itemKey)}}>Move down</button>
-                                            </>) : null
+                                            </div>) : null
                                     }
                                     
 
                                     {
                                         itemKey === editListItemKey ?
-                                        <form onSubmit={(e) => { handleSubmitEditListItem(e, listKey, itemKey, editListItemTextInput) }}>
-                                            <label htmlFor="editListItem"></label>
-                                            <input type="text" name="editListItem" id="editListItem" onChange={handleEditListItemTextInput} value={editListItemTextInput}/>
-                                            <button>Submit my edit</button>
-                                        </form> : <p>{itemText}</p>
+                                            <form onSubmit={(e) => { handleSubmitEditListItem(e, listKey, itemKey, editListItemTextInput) }}>
+                                                <label htmlFor="editListItem"></label>
+                                                <input type="text" id="editListItem" onChange={handleEditListItemTextInput} value={editListItemTextInput}/>
+                                                <button>Finish Edit</button>
+                                            </form>
+                                            : <p onClick={() => { handleSelectEditListItem(itemKey, itemText) }}>{itemText}</p>
                                     }
                                     
                                 </li>
@@ -189,7 +199,7 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
     
                         })
                     }
-                </ul>)
+                </ol>)
     
             } else {
                 return (<div>

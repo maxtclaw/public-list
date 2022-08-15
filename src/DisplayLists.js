@@ -42,7 +42,6 @@ export default function DisplayLists({ database, listsObject, userKey, listKey, 
             }
         }
     }
-    console.log(listsCountObject);
 
 
     return (
@@ -88,11 +87,20 @@ export default function DisplayLists({ database, listsObject, userKey, listKey, 
                 </p>
             }
             {
+                // Go back to viewing all viewable lists
+                // TODO: Replace null with buttons to sort the lists alphabetically/chronologically
+                //      - add controlled inputs and function handlers
+                //      - add.sort() between .filter() and .map() below
+                listKey ? <button onClick={() => { setListKey('') }}>Go Back to Other Lists</button> : null
+            }
+            {
                 // List display
                 listsCountObject[listsDisplaySettingInput] ? <div>
                     <ul> {
                         listsArray.filter((list) => {
-                            if (listsDisplaySettingInput === 'public') {
+                            if (listKey !== '') {
+                                return list[0] === listKey;
+                            } else if (listsDisplaySettingInput === 'public') {
                                 return (list[1].user === 'Anonymous User' || !list[1].hidden);
                             } else if (listsDisplaySettingInput === 'user') {
                                 return list[1].user === userKey;
@@ -104,8 +112,10 @@ export default function DisplayLists({ database, listsObject, userKey, listKey, 
 
                             return (
                                 <li key={listObjectKey}>
-                                    <button onClick={() => { setListKey(listObjectKey) }}>view this list</button>
                                     <DisplayList database={database} userKey={userKey} listKey={listKey} setListKey={setListKey} list={list} />
+                                    {
+                                        listKey ? null : <button onClick={() => { setListKey(listObjectKey) }}>View this list</button>
+                                    }
                                 </li>
                             )
                         })
