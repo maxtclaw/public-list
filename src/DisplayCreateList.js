@@ -84,8 +84,8 @@ export default function DisplayCreateList({ dbRef, userKey, setListKey }) {
             {
                 // Allow hidden option if a user has been provided
                 userKey !== 'Anonymous User' ? <>
-                    <label htmlFor="newHidden">Make List Private</label>
                     <input type="checkbox" id="newHidden" checked={hiddenInput} onChange={handleHiddenInput} />
+                    <label htmlFor="newHidden"> Make List Private </label>
                 </> : null
 
             }

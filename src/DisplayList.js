@@ -34,20 +34,22 @@ export default function DisplayList({ database, userKey, listKey, setListKey, li
 
     return (
         <>
-            {
-                // Only allow deletion if you are on the right userKey
-                (listUser === userKey && listUser !== 'Anonymous User') ? <>
-                    <button onClick={() => { handleRemoveList(listObjectKey) }}>X</button>
-
-                    <label htmlFor="editHidden">Make List Private</label>
-                    <input type="checkbox" id="editHidden" checked={listHidden} onChange={() => { handleHiddenInput(listObjectKey) }} />
-                </> : null
-            }
             {/* TODO: Add option to edit list title and author */}
             <h2>{listTitle}</h2>
             <h3>By: {listAuthor}</h3>
             <h4>({listHidden ? <>Private List</> : <>Public List</>})</h4>
             <p>Number of items in this list: {list[1].listItems ? Object.keys(list[1].listItems).length : 0}</p>
+            <div>
+                {
+                    // Enable Delete and hidden option if you are the listUser
+                    (listUser === userKey && listUser !== 'Anonymous User') ? <>
+                        <input type="checkbox" id="editHidden" checked={listHidden} onChange={() => { handleHiddenInput(listObjectKey) }} />
+                        <label htmlFor="editHidden"> Make List Private </label>
+
+                        <button onClick={() => { handleRemoveList(listObjectKey) }}>Delete List</button>
+                    </> : null
+                }
+            </div>
         </>
     )
 }

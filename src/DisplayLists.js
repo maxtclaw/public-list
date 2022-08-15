@@ -51,11 +51,11 @@ export default function DisplayLists({ database, listsObject, userKey, listKey, 
                 userKey === 'Anonymous User' ? null : <form>
                     <div>
                         <input type="radio" name="listsDisplaySetting" id="listDisplaySettingUser" value='user' checked={listsDisplaySettingInput === 'user'} onChange={() => { handleListDisplaySettingInputChange('user') }} />
-                        <label htmlFor='listDisplaySettingUser'>Show User Lists</label>
+                        <label htmlFor='listDisplaySettingUser'> Show User Lists</label>
                     </div>
                     <div>
                         <input type="radio" name="listsDisplaySetting" id="listsDisplaySettingAll" value='public' checked={listsDisplaySettingInput === 'public'} onChange={() => { handleListDisplaySettingInputChange('public') }} />
-                        <label htmlFor="listsDisplaySettingAll">Show All Lists</label>
+                        <label htmlFor="listsDisplaySettingAll"> Show All Lists</label>
                     </div>
                 </form>
             }

@@ -51,10 +51,14 @@ function App() {
 		{
 			// Display list items if there is a list is selected
 			listKey ? <>
-				{listsObject[listKey]['user'] === userKey ?
-					<DisplayCreateListItem database={database} listsObject={listsObject} listKey={listKey} setListKey={setListKey} />
-					: null}
-				<DisplayListItems database={database} listsObject={listsObject} userKey={userKey} listKey={listKey} setListKey={setListKey} />
+				{listsObject[listKey] ?
+					<>
+						{listsObject[listKey]['user'] === userKey ?
+							<DisplayCreateListItem database={database} listsObject={listsObject} listKey={listKey} setListKey={setListKey} />
+							: null}
+						<DisplayListItems database={database} listsObject={listsObject} userKey={userKey} listKey={listKey} setListKey={setListKey} />
+					</>
+				: null}
 			</> : null
 		}
 		
