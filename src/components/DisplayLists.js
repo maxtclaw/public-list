@@ -64,14 +64,14 @@ export default function DisplayLists({ database, listsObject, userKey, listKey, 
                     // Text display for how many lists are visible (public or user, and if hidden)
                     <p>There {listsCountObject[listsDisplaySettingInput] === 1 ? 'is ' : 'are '}
                         currently <strong>
-                            {listsCountObject[listsDisplaySettingInput] ? listsCountObject[listsDisplaySettingInput] : <>no</>}
-                            {listsDisplaySettingInput === 'user' ? <> user</> : <> publicly viewable</>} list
+                            {listsCountObject[listsDisplaySettingInput] ? listsCountObject[listsDisplaySettingInput] : 'no'}
+                            {listsDisplaySettingInput === 'user' ? ' user' : ' publicly viewable'} list
                             {listsCountObject[listsDisplaySettingInput] === 1 ? '' : 's'}
                             {
                                 listsDisplaySettingInput === 'user' ? (
                                     listsCountObject.user === 1 ?
                                         (listsCountObject.userHidden === 1 ?
-                                            <> (private)</> : <> (public)</>)
+                                            ' (private)' : ' (public)')
                                         : listsCountObject.user > 1 ?
                                             <> ({listsCountObject.user - listsCountObject.userHidden} public, {listsCountObject.userHidden} private)</>
                                             : null
@@ -81,8 +81,8 @@ export default function DisplayLists({ database, listsObject, userKey, listKey, 
                         </strong>
                         {!listsCountObject[listsDisplaySettingInput] ?
                             (listsDisplaySettingInput === 'public' ?
-                                <> Why not add one yourself?</>
-                                : <> Create a list to get started!</>)
+                                ' Why not add one yourself?'
+                                : ' Create a list to get started!')
                             : null
                         }
                     </p>
@@ -117,7 +117,7 @@ export default function DisplayLists({ database, listsObject, userKey, listKey, 
                                 <li key={listObjectKey}>
                                     <DisplayList database={database} userKey={userKey} listKey={listKey} setListKey={setListKey} list={list} />
                                     {
-                                        listKey ? null : <button onClick={() => { setListKey(listObjectKey) }}>View this list</button>
+                                        listKey ? null : <button onClick={() => { setListKey(listObjectKey) }}>View List</button>
                                     }
                                 </li>
                             )

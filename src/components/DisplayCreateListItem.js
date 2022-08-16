@@ -39,6 +39,7 @@ export default function DisplayCreateListItem({database, listsObject, listKey, s
 
     return (
         <form onSubmit={handleSubmitListItem} className="displayCreateListItem">
+            <label htmlFor="listItem" className='sr-only'>New list item text</label>
             <input type="text" name="listItem" id="listItem" value={listItemTextInput} onChange={handleListItemTextChange} placeholder='e.g. Touching grass' required />
             <button type="submit">Add List Item</button>
         </form>

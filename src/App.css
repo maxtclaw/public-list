@@ -58,6 +58,11 @@ section {
 	width: clamp(16rem, 90vw, 70rem);
 	margin: 0 auto;
 	padding-bottom: min(calc(2.5*var(--spacing)), 60px);
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 ul {
@@ -116,14 +121,11 @@ button {
 }
 
 .buttonSquare {
-	height: var(--sizeButton);
 	padding: calc(0.5 * var(--spacing));
 	border-radius: 2px;
-
-		border: 2px solid var(--colorWhite);
-			background-color: var(--colorBlack);
-			color: var(--colorWhite);
-
+	border: 2px solid var(--colorWhite);
+	background-color: var(--colorBlack);
+	color: var(--colorWhite);
 
 	display: inline-flex;
 	justify-content: center;
@@ -284,6 +286,7 @@ header h1 {
 .displayListsContainer li:only-child {
 	border: 1px solid var(--colorNone);
 	border-top: 1px solid var(--colorDivider);
+	margin-bottom: 0px;
 }
 
 .displayListsContainer button {
@@ -315,6 +318,7 @@ header h1 {
 	align-items: center;
 }
 
+/* Style container and buttons to move list item up and down */
 .listItemLeft {
 	display: flex;
 	align-items: center;
@@ -324,7 +328,6 @@ header h1 {
 	padding: 0;
 	border: none;
 	background-color: var(--colorNone);
-
 }
 
 .listItemLeft button:hover {
@@ -349,6 +352,7 @@ header h1 {
 	justify-content: center;
 }
 
+/* Style list item text element */
 .listItemTextContainer {
 	flex-grow: 1;
 }
@@ -371,6 +375,7 @@ header h1 {
 	margin-left: calc(0.5 * var(--spacing));
 }
 
+/* Style edit, confirm edit, and delete list item buttons */
 .listItemRightContainer {
 	display: flex;
 	gap: calc(0.5 * var(--spacing));
@@ -390,12 +395,18 @@ header h1 {
 	background-color: var(--colorRed);
 }
 
+/* Style empty list text */
+.emptyListText p {
+	padding-bottom: var(--spacing);
+}
 /* #endregion */
 
 /* #region Display Create List Items */
 /* Display Create List Item - Styles list item input and Add button */
 .displayCreateListItem {
-	margin: var(--spacing) 0;
+	width: 90%;
+	padding: var(--spacing);
+	border-top: 1px solid var(--colorDivider);
 }
 
 .displayCreateListItem button {
@@ -418,7 +429,6 @@ footer {
 	justify-content: center;
 	align-items: center;
 }
-
 
 footer p, footer a:visited {
 	margin: 0;

@@ -52,8 +52,8 @@ export default function DisplayUserLogin({ userKey, setUserKey, isEditingUser, s
             <label htmlFor="user" className="sr-only">Current User</label>
             <input type="text" id="user" onChange={handleUserChange} value={userInput} placeholder='Anonymous User' disabled={ isEditingUser ? null : 'disabled'} />
             {
-                isEditingUser ? <button type="submit" className="buttonSquare buttonSquareWhite">Set User</button>
-                : <button type='button' className="buttonSquare buttonSquareWhite" onClick={handleSetIsEditingUser}>Change User</button>
+                isEditingUser ? <button type="submit" className="buttonSquare">Set User</button>
+                : <button type='button' className="buttonSquare" onClick={handleSetIsEditingUser}>Change User</button>
             }
         </form>
     )

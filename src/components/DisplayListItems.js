@@ -92,12 +92,12 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
 
                     update(dbListItemsRef, updateListItemsObject);
                 } else {
-                    console.log(`You can't move this item any more ${adjustType}, because it's at the end`)
+                    alert(`You can't move this item any more ${adjustType}, because it's at the end`)
                 }
             }
 
             else {
-                console.log('There has been an erroneous adjustType parameter to adjustListItemIndex')
+                alert('There has been an erroneous adjustType parameter to adjustListItemIndex')
             }
 
         }
@@ -179,8 +179,12 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
                                             // List Item Move Up/Move Down
                                             listsObject[listKey].user === userKey ?
                                                 (<div className="listItemMoveContainer">
-                                                    <button className="listItemMove" onClick={() => { handleShiftListItem('up', itemKey) }} disabled={itemIndex === 0}><i className="fa-solid fa-angle-up"></i></button>
-                                                    <button className="listItemMove" onClick={() => { handleShiftListItem('down', itemKey) }} disabled={itemIndex === itemArray.length - 1}><i className="fa-solid fa-angle-down"></i></button>
+                                                    <button className="listItemMove" onClick={() => { handleShiftListItem('up', itemKey) }} disabled={itemIndex === 0} aria-label="move list item up">
+                                                        <i className="fa-solid fa-angle-up"></i>
+                                                    </button>
+                                                    <button className="listItemMove" onClick={() => { handleShiftListItem('down', itemKey) }} disabled={itemIndex === itemArray.length - 1} aria-label="move list item down">
+                                                        <i className="fa-solid fa-angle-down"></i>
+                                                    </button>
                                                 </div>) : null
                                         }
                                         <p className="listItemIndex">{itemIndex + 1}.</p>
@@ -191,9 +195,9 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
                                         // List Item Text (or edit box)
                                         itemKey === editListItemKey ?
                                                 <form onSubmit={(e) => { handleSubmitEditListItem(e, listKey, itemKey, editListItemTextInput) }}>
-                                                <label htmlFor="editListItem"></label>
+                                                <label htmlFor="editListItem" className="sr-only">Edit list item text</label>
                                                 <input type="text" id="editListItem" onChange={handleEditListItemTextInput} value={editListItemTextInput}/>
-                                            </form> : <p onClick={() => { handleSelectEditListItem(itemKey, itemText) }}>{itemText}</p>
+                                            </form> : <p onClick={(e) => { handleSelectEditListItem(e, itemKey, itemText) }}>{itemText}</p>
                                         }
                                     </div>
 
@@ -203,14 +207,19 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
                                         listsObject[listKey].user === userKey ?
                                             (<div className="listItemRightContainer">
                                                 {
-                                                    itemKey === editListItemKey ? <button type="button" className="listItemSubmit buttonCircle" onClick={(e) => { handleSubmitEditListItem(e, listKey, itemKey, editListItemTextInput) }}><i className="fa-solid fa-check"></i></button> : <button type="button" className="listItemModify buttonCircle" onClick={(e) => { handleSelectEditListItem(e, itemKey, itemText) }}><i className="fa-solid fa-pen-to-square"></i></button>
+                                                    itemKey === editListItemKey ?
+                                                        <button type="button" className="listItemSubmit buttonCircle" onClick={(e) => { handleSubmitEditListItem(e, listKey, itemKey, editListItemTextInput) }} aria-label="submit list item edit">
+                                                            <i className="fa-solid fa-check"></i>
+                                                        </button> :
+                                                        <button type="button" className="listItemModify buttonCircle" onClick={(e) => { handleSelectEditListItem(e, itemKey, itemText) }} aria-label="edit list item">
+                                                            <i className="fa-solid fa-pen-to-square"></i>
+                                                        </button>
                                                 }
-
-                                                    <button className="listItemDelete buttonCircle" onClick={() => { handleRemoveListItem(itemKey) }}><i className="fa-solid fa-trash"></i></button>
+                                                <button className="listItemDelete buttonCircle" onClick={() => { handleRemoveListItem(itemKey) }} aria-label="delete list item">
+                                                    <i className="fa-solid fa-trash"></i>
+                                                </button>
                                             </div>) : null
                                     }
-
-
                                 </li>
                             )
 
@@ -219,7 +228,7 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
                 </ol>)
     
             } else {
-                return (<div>
+                return (<div className="emptyListText">
                     <p className="italic colorTextSecondary">This list currently has no items.</p>
                 </div>)
             }

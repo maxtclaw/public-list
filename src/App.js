@@ -54,38 +54,36 @@ function App() {
 
 				{
 					// Only display main if not currently adjusting the user 
-					isEditingUser ? null :
+					isEditingUser ? <div>
+						<h2 className='italic colorTextSecondary'>Confirm your user to continue viewing lists</h2>
+					</div> :
 						<main>
-							{
-								<>
-									<section>
-										<DisplayCreateList dbRef={dbRef} userKey={userKey} setListKey={setListKey} />
-										<DisplayLists database={database} listsObject={listsObject} userKey={userKey} listKey={listKey} setListKey={setListKey} />
-									</section>
+							<section>
+								<DisplayCreateList dbRef={dbRef} userKey={userKey} setListKey={setListKey} />
+								<DisplayLists database={database} listsObject={listsObject} userKey={userKey} listKey={listKey} setListKey={setListKey} />
+							</section>
 
-									<section>
-										{
-											// Display list items only if there is a list is selected
-											listKey ? <>
-												{listsObject[listKey] ?
-													<>
-														<DisplayListItems database={database} listsObject={listsObject} userKey={userKey} listKey={listKey} setListKey={setListKey} />
-														{listsObject[listKey]['user'] === userKey ?
-															<DisplayCreateListItem database={database} listsObject={listsObject} listKey={listKey} setListKey={setListKey} />
-															: null}
-													</>
+							<section>
+								{
+									// Display list items only if there is a list is selected
+									listKey ? <>
+										{listsObject[listKey] ?
+											<>
+												<DisplayListItems database={database} listsObject={listsObject} userKey={userKey} listKey={listKey} setListKey={setListKey} />
+												{listsObject[listKey]['user'] === userKey ?
+													<DisplayCreateListItem database={database} listsObject={listsObject} listKey={listKey} setListKey={setListKey} />
 													: null}
-											</> : null
-										}
-									</section>
-								</>
-							}
+											</>
+											: null}
+									</> : null
+								}
+							</section>
 						</main>
 				}
 			</div>
 
 			<footer>
-				<p>A Website Created by  <a href="https://github.com/maxtclaw"><span>🌱</span> Max &nbsp;</a></p>
+				<p>Website Created by  <a href="https://github.com/maxtclaw"><span>🌱</span> Max &nbsp;</a></p>
 			</footer>
 
 		</div>
