@@ -179,8 +179,8 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
                                             // List Item Move Up/Move Down
                                             listsObject[listKey].user === userKey ?
                                                 (<div className="listItemMoveContainer">
-                                                    <button className="listItemMove" onClick={() => { handleShiftListItem('up', itemKey) }} disabled={itemIndex === 0}><i class="fa-solid fa-angle-up"></i></button>
-                                                    <button className="listItemMove" onClick={() => { handleShiftListItem('down', itemKey) }} disabled={itemIndex === itemArray.length - 1}><i class="fa-solid fa-angle-down"></i></button>
+                                                    <button className="listItemMove" onClick={() => { handleShiftListItem('up', itemKey) }} disabled={itemIndex === 0}><i className="fa-solid fa-angle-up"></i></button>
+                                                    <button className="listItemMove" onClick={() => { handleShiftListItem('down', itemKey) }} disabled={itemIndex === itemArray.length - 1}><i className="fa-solid fa-angle-down"></i></button>
                                                 </div>) : null
                                         }
                                         <p className="listItemIndex">{itemIndex + 1}.</p>
@@ -203,10 +203,10 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
                                         listsObject[listKey].user === userKey ?
                                             (<div className="listItemRightContainer">
                                                 {
-                                                    itemKey === editListItemKey ? <button type="button" className="listItemSubmit buttonCircle" onClick={(e) => { handleSubmitEditListItem(e, listKey, itemKey, editListItemTextInput) }}><i class="fa-solid fa-check"></i></button> : <button type="button" className="listItemModify buttonCircle" onClick={(e) => { handleSelectEditListItem(e, itemKey, itemText) }}><i class="fa-solid fa-pen-to-square"></i></button>
+                                                    itemKey === editListItemKey ? <button type="button" className="listItemSubmit buttonCircle" onClick={(e) => { handleSubmitEditListItem(e, listKey, itemKey, editListItemTextInput) }}><i className="fa-solid fa-check"></i></button> : <button type="button" className="listItemModify buttonCircle" onClick={(e) => { handleSelectEditListItem(e, itemKey, itemText) }}><i className="fa-solid fa-pen-to-square"></i></button>
                                                 }
 
-                                                    <button className="listItemDelete buttonCircle" onClick={() => { handleRemoveListItem(itemKey) }}><i class="fa-solid fa-trash"></i></button>
+                                                    <button className="listItemDelete buttonCircle" onClick={() => { handleRemoveListItem(itemKey) }}><i className="fa-solid fa-trash"></i></button>
                                             </div>) : null
                                     }
 
@@ -220,7 +220,7 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
     
             } else {
                 return (<div>
-                    <p class="italic colorTextSecondary">This list currently has no items.</p>
+                    <p className="italic colorTextSecondary">This list currently has no items.</p>
                 </div>)
             }
         } else {
