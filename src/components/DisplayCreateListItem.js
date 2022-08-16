@@ -24,6 +24,9 @@ export default function DisplayCreateListItem({database, listsObject, listKey, s
                     index: newListItemIndex,
                     text: listItemTextInput
                 })
+
+                window.scrollTo(0, document.body.scrollHeight);
+
             } else {
                 setListKey('');
                 alert('Error Submitting - This list either does not exist, or has been deleted.')
@@ -35,9 +38,9 @@ export default function DisplayCreateListItem({database, listsObject, listKey, s
     }
 
     return (
-        <form onSubmit={handleSubmitListItem}>
+        <form onSubmit={handleSubmitListItem} className="displayCreateListItem">
             <input type="text" name="listItem" id="listItem" value={listItemTextInput} onChange={handleListItemTextChange} placeholder='e.g. Touching grass' required />
-            <button type="submit">Submit List Item</button>
+            <button type="submit">Add List Item</button>
         </form>
     )
 }

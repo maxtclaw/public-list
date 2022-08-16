@@ -6,11 +6,11 @@ import { getDatabase, ref, onValue } from 'firebase/database';
 
 // Import React Methods and Components
 import { useState, useEffect } from 'react';
-import DisplayUserLogin from './DisplayUserLogin';
-import DisplayCreateList from './DisplayCreateList';
-import DisplayLists from './DisplayLists'
-import DisplayCreateListItem from './DisplayCreateListItem';
-import DisplayListItems from './DisplayListItems';
+import DisplayUserLogin from './components/DisplayUserLogin';
+import DisplayCreateList from './components/DisplayCreateList';
+import DisplayLists from './components/DisplayLists'
+import DisplayCreateListItem from './components/DisplayCreateListItem';
+import DisplayListItems from './components/DisplayListItems';
 
 // Firebase variables
 const database = getDatabase(firebase);
@@ -24,6 +24,10 @@ function App() {
 	// Current userKey and listKey
 	const [userKey, setUserKey] = useState('Anonymous User');
 	const [listKey, setListKey] = useState('');
+
+	// State to check how to display user ✅
+	// Also disables all other elements to avoid errors
+	const [isEditingUser, setIsEditingUser] = useState(false);
 
 	// useEffect to keep root Firebase objects updated ✅
 	useEffect(() => {
@@ -39,29 +43,51 @@ function App() {
 
 	return (
 		<div className="App">
+			<DisplayUserLogin userKey={userKey} setUserKey={setUserKey} isEditingUser={isEditingUser} setIsEditingUser={setIsEditingUser} setListKey={setListKey} />
 
-		<h1>Public List</h1>
-		<DisplayUserLogin userKey={userKey} setUserKey={setUserKey} />
+			<div className="wrapper">
 
-		{/* TODO: Fix bug where lists can be created while setting userKey */}
-		<DisplayCreateList dbRef={dbRef} userKey={userKey} setListKey={setListKey} />
+				<header>
+					<h1>Public List</h1>
+					<p>A place to make and share your lists, public or private.</p>
+				</header>
 
-		<DisplayLists database={database} listsObject={listsObject} userKey={userKey} listKey={listKey} setListKey={setListKey} />
+				{
+					// Only display main if not currently adjusting the user 
+					isEditingUser ? null :
+						<main>
+							{
+								<>
+									<section>
+										<DisplayCreateList dbRef={dbRef} userKey={userKey} setListKey={setListKey} />
+										<DisplayLists database={database} listsObject={listsObject} userKey={userKey} listKey={listKey} setListKey={setListKey} />
+									</section>
 
-		{
-			// Display list items if there is a list is selected
-			listKey ? <>
-				{listsObject[listKey] ?
-					<>
-						{listsObject[listKey]['user'] === userKey ?
-							<DisplayCreateListItem database={database} listsObject={listsObject} listKey={listKey} setListKey={setListKey} />
-							: null}
-						<DisplayListItems database={database} listsObject={listsObject} userKey={userKey} listKey={listKey} setListKey={setListKey} />
-					</>
-				: null}
-			</> : null
-		}
-		
+									<section>
+										{
+											// Display list items only if there is a list is selected
+											listKey ? <>
+												{listsObject[listKey] ?
+													<>
+														<DisplayListItems database={database} listsObject={listsObject} userKey={userKey} listKey={listKey} setListKey={setListKey} />
+														{listsObject[listKey]['user'] === userKey ?
+															<DisplayCreateListItem database={database} listsObject={listsObject} listKey={listKey} setListKey={setListKey} />
+															: null}
+													</>
+													: null}
+											</> : null
+										}
+									</section>
+								</>
+							}
+						</main>
+				}
+			</div>
+
+			<footer>
+				<p>A Website Created by  <a href="https://github.com/maxtclaw"><span>🌱</span> Max &nbsp;</a></p>
+			</footer>
+
 		</div>
 	);
 }

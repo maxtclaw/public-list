@@ -70,15 +70,15 @@ export default function DisplayCreateList({ dbRef, userKey, setListKey }) {
 
 
     return (
-        <form onSubmit={handleSubmitList}>
-            <div onClick={selectAllText}>
+        <form onSubmit={handleSubmitList} className="displayCreateList">
+            <div>
                 <label htmlFor="newTitle">List Title: </label>
-                <input type="text" id="newTitle" onChange={handleTitleChange} value={titleInput} placeholder='e.g. My Necessities' required />
+                <input type="text" id="newTitle" onChange={handleTitleChange} onClick={selectAllText} value={titleInput} placeholder='e.g. My Necessities' required />
             </div>
 
-            <div onClick={selectAllText} >
-                <label htmlFor="newAuthor">List Author: </label>
-                <input type="text" id="newAuthor" onChange={handleAuthorChange} value={authorInput} placeholder='e.g. Needy Sapling' required />
+            <div>
+                <label htmlFor="newAuthor">Author: </label>
+                <input type="text" id="newAuthor" onChange={handleAuthorChange} onClick={selectAllText} value={authorInput} placeholder='e.g. Needy Sapling' required />
             </div>
 
             {
@@ -87,11 +87,9 @@ export default function DisplayCreateList({ dbRef, userKey, setListKey }) {
                     <input type="checkbox" id="newHidden" checked={hiddenInput} onChange={handleHiddenInput} />
                     <label htmlFor="newHidden"> Make List Private </label>
                 </> : null
-
             }
 
-            <button type="submit">Make my list!</button>
-
+            <button type="submit">Make List!</button>
         </form>
     );
 }

@@ -110,7 +110,7 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
     }
 
     // Edits list item at given listItemKey ✅
-    const handleSelectEditListItem = function (listItemKeyParam, listItemTextParam) {
+    const handleSelectEditListItem = function (e, listItemKeyParam, listItemTextParam) {
         setEditListItemKey(listItemKeyParam);
         setEditListItemTextInput(listItemTextParam);
     }
@@ -138,6 +138,7 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
             set(dbListItemRef, newListItemObject)
             setEditListItemKey('');
             setEditListItemTextInput('');
+
             
         } else {
             handleRemoveListItem(listItemKeyParam)
@@ -163,7 +164,7 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
                     return (a[1].index < b[1].index ? -1 : 1)
                 })
     
-                return (<ol>
+                return (<ol className="displayListItemsContainer">
                     {
                         listItems.map((item, itemIndex, itemArray) => {
                             
@@ -173,37 +174,53 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
                             return (
                                 <li key={itemKey}>
 
-                                    {
-                                        listsObject[listKey].user === userKey ?
-                                            (<div>
-                                                <button onClick={() => {handleShiftListItem('up', itemKey)}} disabled={itemIndex === 0}>Move Up</button>
-                                                <button onClick={() => {handleShiftListItem('down', itemKey)}} disabled={itemIndex === itemArray.length - 1}>Move Down</button>
-                                                <button onClick={() => { handleSelectEditListItem(itemKey, itemText) }}>Edit</button>
-                                                <button onClick={() => { handleRemoveListItem(itemKey) }}>Delete</button>
-                                            </div>) : null
-                                    }
-                                    
+                                    <div className="listItemLeft">
+                                        {
+                                            // List Item Move Up/Move Down
+                                            listsObject[listKey].user === userKey ?
+                                                (<div className="listItemMoveContainer">
+                                                    <button className="listItemMove" onClick={() => { handleShiftListItem('up', itemKey) }} disabled={itemIndex === 0}><i class="fa-solid fa-angle-up"></i></button>
+                                                    <button className="listItemMove" onClick={() => { handleShiftListItem('down', itemKey) }} disabled={itemIndex === itemArray.length - 1}><i class="fa-solid fa-angle-down"></i></button>
+                                                </div>) : null
+                                        }
+                                        <p className="listItemIndex">{itemIndex + 1}.</p>
+                                    </div>
 
+                                    <div className="listItemTextContainer">
                                     {
+                                        // List Item Text (or edit box)
                                         itemKey === editListItemKey ?
-                                            <form onSubmit={(e) => { handleSubmitEditListItem(e, listKey, itemKey, editListItemTextInput) }}>
+                                                <form onSubmit={(e) => { handleSubmitEditListItem(e, listKey, itemKey, editListItemTextInput) }}>
                                                 <label htmlFor="editListItem"></label>
                                                 <input type="text" id="editListItem" onChange={handleEditListItemTextInput} value={editListItemTextInput}/>
-                                                <button>Finish Edit</button>
-                                            </form>
-                                            : <p onClick={() => { handleSelectEditListItem(itemKey, itemText) }}>{itemText}</p>
+                                            </form> : <p onClick={() => { handleSelectEditListItem(itemKey, itemText) }}>{itemText}</p>
+                                        }
+                                    </div>
+
+
+                                    {
+                                        // List Item Edit/Delete
+                                        listsObject[listKey].user === userKey ?
+                                            (<div className="listItemRightContainer">
+                                                {
+                                                    itemKey === editListItemKey ? <button type="button" className="listItemSubmit buttonCircle" onClick={(e) => { handleSubmitEditListItem(e, listKey, itemKey, editListItemTextInput) }}><i class="fa-solid fa-check"></i></button> : <button type="button" className="listItemModify buttonCircle" onClick={(e) => { handleSelectEditListItem(e, itemKey, itemText) }}><i class="fa-solid fa-pen-to-square"></i></button>
+                                                }
+
+                                                    <button className="listItemDelete buttonCircle" onClick={() => { handleRemoveListItem(itemKey) }}><i class="fa-solid fa-trash"></i></button>
+                                            </div>) : null
                                     }
-                                    
+
+
                                 </li>
                             )
-    
+
                         })
                     }
                 </ol>)
     
             } else {
                 return (<div>
-                    <p>This list currently has no items.</p>
+                    <p class="italic colorTextSecondary">This list currently has no items.</p>
                 </div>)
             }
         } else {
@@ -212,7 +229,7 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
         }
     } else {
         return (<div>
-            <p>No list was selected. Pick a list to see what's inside!</p>
+            <p className="italic colorTextSecondary">No list was selected. Pick a list to see what's inside!</p>
         </div>)
     }
     

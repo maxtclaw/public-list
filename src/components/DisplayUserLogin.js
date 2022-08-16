@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 
-export default function DisplayUserLogin({ userKey, setUserKey }) {
-    
-    // State to check how to display user ✅
-    const [isEditingUser, setIsEditingUser] = useState(false);
+export default function DisplayUserLogin({ userKey, setUserKey, isEditingUser, setIsEditingUser, setListKey }) {
+
+    // Track the initial userKey
+    const currUser = userKey;
+
+    // Handle setting isEditingUser state prop ✅
     const handleSetIsEditingUser = function (e) {
         e.preventDefault();
         setIsEditingUser(true);
@@ -32,6 +34,11 @@ export default function DisplayUserLogin({ userKey, setUserKey }) {
             setUserKey('Anonymous User');
             setUserInput('Anonymous User');
         }
+
+        // Reset list display if user changes from before
+        if (userInput !== currUser) {
+            setListKey('');
+        }
     }
 
     // Automatic highlight userInput textbox when editing ✅
@@ -41,12 +48,12 @@ export default function DisplayUserLogin({ userKey, setUserKey }) {
     }, [isEditingUser])
 
     return (
-        <form onSubmit={handleSubmitUser}>
-            <label htmlFor="user">Current User: </label>
+        <form onSubmit={handleSubmitUser} className="displayUserLogin">
+            <label htmlFor="user" className="sr-only">Current User</label>
             <input type="text" id="user" onChange={handleUserChange} value={userInput} placeholder='Anonymous User' disabled={ isEditingUser ? null : 'disabled'} />
             {
-                isEditingUser ? <button type="submit">Set User</button>
-                : <button type='button' onClick={handleSetIsEditingUser}>Change User</button>
+                isEditingUser ? <button type="submit" className="buttonSquare buttonSquareWhite">Set User</button>
+                : <button type='button' className="buttonSquare buttonSquareWhite" onClick={handleSetIsEditingUser}>Change User</button>
             }
         </form>
     )

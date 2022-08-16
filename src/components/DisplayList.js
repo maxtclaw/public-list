@@ -37,7 +37,7 @@ export default function DisplayList({ database, userKey, listKey, setListKey, li
             {/* TODO: Add option to edit list title and author */}
             <h2>{listTitle}</h2>
             <h3>By: {listAuthor}</h3>
-            <h4>({listHidden ? <>Private List</> : <>Public List</>})</h4>
+            <h4 className="colorTextSecondary">({listHidden ? <>Private List</> : <>Public List</>})</h4>
             <p>Number of items in this list: {list[1].listItems ? Object.keys(list[1].listItems).length : 0}</p>
             <div>
                 {
