@@ -52,6 +52,7 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
                 set(dbListItemsRef, newListItemsObject)
             }
             
+            // Update the database if items are shifted up or down
             else if (adjustType === 'up' || adjustType === 'down') {
 
                 const currItemIndex = listItemsObject[listItemKeyParam].index;
@@ -143,7 +144,6 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
         } else {
             handleRemoveListItem(listItemKeyParam)
         }
-
     }
 
     // Handle shifting of listItems ✅
@@ -155,11 +155,12 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
         }
     }
 
+    // Nested check is required in case someone else deletes a list you are currently viewing
     if (listKey) {
         if (listsObject[listKey]) {
             if ('listItems' in listsObject[listKey]) {
     
-                // Sort the list items for display according to the item index
+                // Sort the list items for display according to the listItem index
                 const listItems = Object.entries(JSON.parse(JSON.stringify(listsObject[listKey]['listItems']))).sort((a, b) => {
                     return (a[1].index < b[1].index ? -1 : 1)
                 })
@@ -174,9 +175,9 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
                             return (
                                 <li key={itemKey}>
 
+                                    {/* Buttons left of each listItem: Move Up/Move Down */}
                                     <div className="listItemLeft">
                                         {
-                                            // List Item Move Up/Move Down
                                             listsObject[listKey].user === userKey ?
                                                 (<div className="listItemMoveContainer">
                                                     <button className="listItemMove" onClick={() => { handleShiftListItem('up', itemKey) }} disabled={itemIndex === 0} aria-label="move list item up">
@@ -190,9 +191,9 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
                                         <p className="listItemIndex">{itemIndex + 1}.</p>
                                     </div>
 
+                                    {/* List Item Text (or edit box) */}
                                     <div className="listItemTextContainer">
                                     {
-                                        // List Item Text (or edit box)
                                             itemKey === editListItemKey && listsObject[listKey].user === userKey ?
                                                 <form onSubmit={(e) => { handleSubmitEditListItem(e, listKey, itemKey, editListItemTextInput) }}>
                                                 <label htmlFor="editListItem" className="sr-only">Edit list item text</label>
@@ -201,9 +202,8 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
                                         }
                                     </div>
 
-
+                                    {/* Buttons right of each listItem: Edit, Confirm Edit, Delete */}
                                     {
-                                        // List Item Edit/Delete
                                         listsObject[listKey].user === userKey ?
                                             (<div className="listItemRightContainer">
                                                 {

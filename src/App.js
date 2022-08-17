@@ -7,10 +7,8 @@ import { getDatabase, ref, onValue } from 'firebase/database';
 // Import React Methods and Components
 import { useState, useEffect } from 'react';
 import DisplayUserLogin from './components/DisplayUserLogin';
-import DisplayCreateList from './components/DisplayCreateList';
-import DisplayLists from './components/DisplayLists'
-import DisplayCreateListItem from './components/DisplayCreateListItem';
-import DisplayListItems from './components/DisplayListItems';
+import SectionLists from './components/SectionLists';
+import SectionListItems from './components/SectionListItems';
 
 // Firebase variables
 const database = getDatabase(firebase);
@@ -43,7 +41,14 @@ function App() {
 
 	return (
 		<div className="App">
-			<DisplayUserLogin userKey={userKey} setUserKey={setUserKey} isEditingUser={isEditingUser} setIsEditingUser={setIsEditingUser} setListKey={setListKey} />
+			{/* Component for receiving user login */}
+			<DisplayUserLogin
+				userKey={userKey}
+				setUserKey={setUserKey}
+				isEditingUser={isEditingUser}
+				setIsEditingUser={setIsEditingUser}
+				setListKey={setListKey}
+			/>
 
 			<div className="wrapper">
 
@@ -54,38 +59,36 @@ function App() {
 
 				{
 					// Only display main if not currently adjusting the user 
-					isEditingUser ? <div>
-						<h2 className='italic colorTextSecondary'>Confirm your user to continue viewing lists</h2>
-					</div> :
+					isEditingUser ?
+						<div>
+							<h2 className='italic colorTextSecondary'>Confirm your user to continue viewing lists</h2>
+						</div> :
 						<main>
-							{/* List Section */}
-							<section>
-								<DisplayCreateList dbRef={dbRef} userKey={userKey} setListKey={setListKey} />
-								<DisplayLists database={database} listsObject={listsObject} userKey={userKey} listKey={listKey} setListKey={setListKey} />
-							</section>
+							{/* List Section - For List Creation and Display */}
+							<SectionLists
+								database={database}
+								dbRef={dbRef}
+								listsObject={listsObject}
+								userKey={userKey}
+								listKey={listKey}
+								setListKey={setListKey}
+							/>
 
-							{/* List Item Section */}
-							<section>
-								{
-									// Display list items only if there is a list is selected
-									listKey ? <>
-										{listsObject[listKey] ?
-											<>
-												<DisplayListItems database={database} listsObject={listsObject} userKey={userKey} listKey={listKey} setListKey={setListKey} />
-												{listsObject[listKey]['user'] === userKey ?
-													<DisplayCreateListItem database={database} listsObject={listsObject} listKey={listKey} setListKey={setListKey} />
-													: null}
-											</>
-											: null}
-									</> : null
-								}
-							</section>
+
+							{/* List Item Section for List Item Creation and Display*/}
+							<SectionListItems
+								database={database}
+								listsObject={listsObject}
+								userKey={userKey}
+								listKey={listKey}
+								setListKey={setListKey}
+							/>
 						</main>
 				}
 			</div>
 
 			<footer>
-				<p>Website Created by  <a href="https://github.com/maxtclaw"><span>🌱</span> Max &nbsp;</a></p>
+				<p>Website Created by <a href="https://github.com/maxtclaw"><span>🌱</span> Max &nbsp;</a> at Juno College</p>
 			</footer>
 
 		</div>
