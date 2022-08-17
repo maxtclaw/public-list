@@ -264,13 +264,13 @@ header h1 {
 }
 
 /* Display Lists Container - Styles all viewable lists or selected list */
-.displayListsContainer{
+ul.displayListsContainer {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 	flex-wrap: wrap;
 	gap: var(--spacing);
-
+	padding-bottom: 50px;
 	width: 100%;
 	margin: 0;
 }
@@ -279,7 +279,6 @@ header h1 {
 	border: 1px solid var(--colorDivider);
 	flex-grow: 1;
 	margin: 0 auto;
-	margin-bottom: 50px;
 	padding: calc(0.5 * var(--spacing));
 }
 
