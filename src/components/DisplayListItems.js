@@ -193,7 +193,7 @@ export default function DisplayListItems({ database, listsObject, userKey, listK
                                     <div className="listItemTextContainer">
                                     {
                                         // List Item Text (or edit box)
-                                        itemKey === editListItemKey ?
+                                            itemKey === editListItemKey && listsObject[listKey].user === userKey ?
                                                 <form onSubmit={(e) => { handleSubmitEditListItem(e, listKey, itemKey, editListItemTextInput) }}>
                                                 <label htmlFor="editListItem" className="sr-only">Edit list item text</label>
                                                 <input type="text" id="editListItem" onChange={handleEditListItemTextInput} value={editListItemTextInput}/>
