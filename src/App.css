@@ -270,7 +270,7 @@ ul.displayListsContainer {
 	justify-content: space-between;
 	flex-wrap: wrap;
 	gap: var(--spacing);
-	padding-bottom: 50px;
+	padding-bottom: var(--spacing);
 	width: 100%;
 	margin: 0;
 }
