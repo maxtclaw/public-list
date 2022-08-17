@@ -58,11 +58,13 @@ function App() {
 						<h2 className='italic colorTextSecondary'>Confirm your user to continue viewing lists</h2>
 					</div> :
 						<main>
+							{/* List Section */}
 							<section>
 								<DisplayCreateList dbRef={dbRef} userKey={userKey} setListKey={setListKey} />
 								<DisplayLists database={database} listsObject={listsObject} userKey={userKey} listKey={listKey} setListKey={setListKey} />
 							</section>
 
+							{/* List Item Section */}
 							<section>
 								{
 									// Display list items only if there is a list is selected

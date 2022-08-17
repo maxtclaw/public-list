@@ -181,14 +181,18 @@ header h1 {
 /* #region Display User login Styling */
 .displayUserLogin {
 	background-color: var(--colorBlack);
-	padding: calc(0.5 * var(--spacing)) var(--spacing);
-	color: var(--colorWhite);
+}
 
+.displayUserLogin .wrapper{
+	background-color: var(--colorBlack);
+	padding: calc(0.5 * var(--spacing)) 0;
+	color: var(--colorWhite);
+	
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-end;
 	align-items: center;
-	gap: var(--spacing)
+	gap: var(--spacing);
 }
 
 .displayUserLogin input {
@@ -196,12 +200,17 @@ header h1 {
 	flex-shrink: 1;
 	width: 0;
 	max-width: 250px;
-	min-width: 185px;
+	min-width: 180px;
 	border-color: var(--colorWhite);
 }
 
+.displayUserLogin input:disabled {
+	border-color: var(--colorTextSecondary);
+	color: var(--colorWhite)
+}
+
 .displayUserLogin button {
-	width: 170px;
+	width: 175px;
 }
 /* #endregion */
 

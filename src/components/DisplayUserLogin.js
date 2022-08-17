@@ -49,12 +49,14 @@ export default function DisplayUserLogin({ userKey, setUserKey, isEditingUser, s
 
     return (
         <form onSubmit={handleSubmitUser} className="displayUserLogin">
-            <label htmlFor="user" className="sr-only">Current User</label>
-            <input type="text" id="user" onChange={handleUserChange} value={userInput} placeholder='Anonymous User' disabled={ isEditingUser ? null : 'disabled'} />
-            {
-                isEditingUser ? <button type="submit" className="buttonSquare">Set User</button>
-                : <button type='button' className="buttonSquare" onClick={handleSetIsEditingUser}>Change User</button>
-            }
+            <div className="wrapper">
+                <label htmlFor="user" className="sr-only">Current User</label>
+                <input type="text" id="user" onChange={handleUserChange} value={userInput} placeholder='Anonymous User' disabled={ isEditingUser ? null : 'disabled'} />
+                {
+                    isEditingUser ? <button type="submit" className="buttonSquare">Set User</button>
+                    : <button type='button' className="buttonSquare" onClick={handleSetIsEditingUser}>Change User</button>
+                }
+            </div>
         </form>
     )
 }
