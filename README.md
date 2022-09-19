@@ -1,11 +1,13 @@
 # Public List
 ## Project Links
 Project Repository: [Github](https://github.com/maxtclaw/public-list)
-For a live web experience: [Live Link](https://public-list-production.netlify.app/)
+
+For a live experience: [Live Link](https://public-list-production.netlify.app/)
 
 ## About
 Public List is a website that allows viewers to create, save, and share various lists. Users can create a simple ID to access hidden lists, or browse and edit publicly available lists. 
-Disclaimer: Hidden lists may still be accessed and viewed by others. Please do not use this website to store any sensitive information!
+
+**Disclaimer: Hidden lists may still be accessed and viewed by others. Please do not use this website to store any sensitive information!**
 
 ## Features
 * Fully responsive and accessible design
